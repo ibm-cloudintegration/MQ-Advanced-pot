@@ -22,9 +22,18 @@
 <br>
 
 ## 1. Introduction <a name="introduction"></a>
-In this lab, you will investigate the process of configuring the NativeHA Queue Manager on RHEL Virtual Machines. Additionally, you will conduct High Availability testing in the Live environment and monitoring the transition of client connections.
+
+**What is Native HA?** <br>
+Native HA is a high availability solution that is available on container deployments of IBM® MQ and on Linux.
+
+**What is Native HA In-Region Replication (IRR)?** <br>
+A Native HA In-Region Replication (IRR) configuration enables you to switch the running of a queue manager to a different Native HA configuration in a different location within the same region.
+
+**In this lab**, you will investigate the process of configuring the NativeHA In-Region Replication (IRR) Queue Manager on RHEL Virtual Machines. Additionally, you will conduct testing in the Live environment, subsequently performing a failover to the Recovery environment and monitoring the transition of client connections from Live to Recovery.
+.
 
 ![alt text](images/MQ-title-HA-VM.png)
+
 <br>
 
 ## 2. Workshop Environments  <a name="workshop-env"></a>
