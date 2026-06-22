@@ -39,7 +39,7 @@ A Native HA In-Region Replication (IRR) configuration enables you to switch the 
 ## 2. Workshop Environments  <a name="workshop-env"></a>
 
 You need to reserve Techzone environment which will have 6 RHEL VMs, and 1 WIndows VM. <br>
-For this lab we will be using acemq1,acemq2,acemq3 for doing the MQ nativeHA. <br>
+For this lab we will be using acemq1 and acemq4 for doing the MQ native HA IRR. <br>
 We will launch everything from the Windows image.
 
 Click on the Windows image console to open it.
