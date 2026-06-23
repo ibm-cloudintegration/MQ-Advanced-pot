@@ -99,7 +99,7 @@ Click on the Windows image console to open it.
 
 2. Copy all key.* files to acemq2 Virtual Machines using sftp.   Login to acemq2 using password *engageibm* <br>
    ```
-   sftp ibmuser@acemq2
+   sftp ibmuser@acemq4
    ```
    ``` 
    mput /var/mqm/qmgrs/MQ01HA/ssl/key.* /var/mqm/qmgrs/MQ01HA/ssl
@@ -107,20 +107,11 @@ Click on the Windows image console to open it.
    ```
    quit
    ```
-1. Copy all key.* files to acemq3 Virtual Machines using sftp.   Login to acemq3 using password *engageibm* <br>
-   ```
-   sftp ibmuser@acemq3 
-   Enter password 
-   ```
-   ```
-   mput /var/mqm/qmgrs/MQ01HA/ssl/key.* /var/mqm/qmgrs/MQ01HA/ssl
-   ```
-   ```
-   quit
-   ```
+
 ![alt text](images/crtmq1b.png)
 
-4. On acemq2, acemq3 run the following commands. <br>
+
+4. On acemq4 run the following commands. <br>
    ```
    sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
@@ -129,44 +120,99 @@ Click on the Windows image console to open it.
    ```
 ![alt text](images/crtmq1c.png)
 
+
 ### 3c. Update qm.ini <a name="update-live-qm-ini"></a>
 
-1. On each VM (acemq1,2,3), we will add the TLS parameters as well as all 3 NativeHAInstances to qm.ini. 
+1. On VM acemq1, we will add the TLS parameters as well as all 3 NativeHAInstances to qm.ini. 
 
-   You can run the following command on all 3 images to look at the current **qm.ini** files.  
+   You can run the following command to look at the current **qm.ini** file.
 
    ```
    cat /var/mqm/qmgrs/MQ01HA/qm.ini
    ```
    ![alt text](images/qm1.png)
-1. We will now from the **acemq1** putty session we will run the update script that will update all 3 qm.ini files on the 3 instances.
 
-   The output will show that you have updated all 3 instances.
-   ```
-   cd  mqha-crr
-   ```
-   ```
-   ./1-qm-ha.sh
-   ```
+   
+1. We will now from the **acemq1** putty session, use vi and add below lines. <br>
+
+```
+vi /var/mqm/qmgrs/MQ01HA/qm.ini
+
+NativeHALocalInstance:
+   Name=acemq1
+   GroupName=datacenter1
+   GroupRole=Live
+   GroupLocalAddress=(4454)
+   KeyRepository=/var/mqm/qmgrs/MQ01HA/ssl/key
+   GroupCertificateLabel=selfsigned
+NativeHARecoveryGroup:
+   GroupName=datacenter2
+   ReplicationAddress=acemq4(4454)
+   SyncReplication=Yes
+```
+<!--
    ![alt text](images/qm1a.png)
+-->
 
-1. When done run the following command on all 3 instances to verify that the **qm.ini** was updated correctly. 
+1. When done run the following command on acemq1 instance to verify that the **qm.ini** was updated correctly. 
 
 ```
 cat /var/mqm/qmgrs/MQ01HA/qm.ini
 ```
 
-   ![alt text](images/qm1b.png)
+![alt text](images/qm1b.png)
+
+
+
+
+
+### 3d. Update qm.ini <a name="update-recovery-qm-ini"></a>
+
+   You can run the following command on **acemq4** to look at the current **qm.ini** file.
+
+   ```
+   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   ```
+   ![alt text](images/qm2.png)
+
+   
+1. We will now from the **acemq4** putty session, use vi and add below lines. <br>
+
+```
+vi /var/mqm/qmgrs/MQ01HA/qm.ini
+
+NativeHALocalInstance:
+   Name=acemq4
+   GroupName=datacenter2
+   GroupRole=Recovery
+   GroupLocalAddress=(4454)
+   KeyRepository=/var/mqm/qmgrs/MQ01HA/ssl/key
+   GroupCertificateLabel=selfsigned
+NativeHARecoveryGroup:
+   GroupName=datacenter1
+   ReplicationAddress=acemq1(4454)
+   SyncReplication=Yes
+```
+
+
+1. When done run the following command on acemq4 instance to verify that the **qm.ini** was updated correctly. 
+
+```
+cat /var/mqm/qmgrs/MQ01HA/qm.ini
+```
+
+![alt text](images/qm2b.png)
+
 
 
 ### 3d. Start Queue Manager <a name="live-qmgr-start"></a>
 
-1. Run the following commands to restart the queue manager on all 3 vm's (acemq1,2,3). <br>
+1. Run the following commands to restart the queue manager on acemq1,4. <br>
 
    ```
    strmqm MQ01HA
    ```
-1. Once all 3 QMgrs are running go to one of the VMs and run the following command. 
+1. Once QMgr IS running ON acemq1, acemq4 run the following command. 
 
    The Queue Manager should be active in one of Virtual Machines. <br>
 
@@ -175,9 +221,10 @@ cat /var/mqm/qmgrs/MQ01HA/qm.ini
    ```
 ![alt text](images/qm3.png)
 
+
 ### 3e. Disable Security <a name="disable-security"></a>
 
-1. Find the node that the QMgr is running as **Active** using this command.
+1. Find the node that the QMgr is running as **acemq1** using this command.
 
    ```
    dspmq -o nativeha -x 
@@ -196,6 +243,8 @@ DEFINE QLOCAL(APPQ) DEFPSIST(YES)
 <br>
 
 ![alt text](images/qm4.png)
+
+
 
 ### 3f. Enable systemd Monitoring  <a name="live-systemd"></a>
 
@@ -224,31 +273,66 @@ sudo systemctl start mqmonitor@MQ01HA
 ### 4a. Put and Get messages (amqsphac, amqsghac)  <a name="ha-put-get"></a>
 
 1. **On the Windows VM** <br> 
-   Open the **MQ-Labs** folder and start the **putter and getter** batch files. <br>
+   start two command line programs. <br>
+   
+   ![alt text](cmdlines.png)
+
+   On each Command Line window, run the following commands. <br>
+
+   ```
+   SET MQSERVER=NATIVEHACHL.SVRCONN/TCP/acemq1(1414),acemq4(1414)
+   ```
+
+   On acemq1, <br>
+   ```
+   amqsphac APPQ MQ01HA
+   ```
+
+   On acemq4, <br>
+   ```
+   amqsghac APPQ MQ01HA
+   ```
 
    ![alt text](images/ha-test1.png)
 
 <br>
 
 
-### 4b. Failover the Queue Manager  <a name="ha-failover"></a>
 
-1. We will now manually failover the Queue Manager from where it's running. <br>
-   Run **dspmq** on each of the RH VMs and you will see where the QMgr is currently running.  
+
+## 4. Switching Roles  <a name="switch-roles"></a>
+
+1. We will now check the status of both are Datacenter deployments.  If this is the first time you should see **Datacenter1 - Live** and **Datacenter2 - Recovery**
+
+   You can run the script in either Datacenter.  In this example we are showing the command running in both Datacenters but you only need to run it on one of the putty instances.  
+
+   ```
+   ./get-status.sh 
+   ```
+   ![alt text](images/status1-CRR.png)
+
+
+1. Run the following command from one of the putty instances and it will determine the current status and do the switch for each Datacenter as well as restart the QMgr on each instance.
+   
+   ```
+   ./5-switch-crr.sh
+   ```
+    ![alt text](images/switch2-CRR.png)
+
+   **Note:** Here you will see the switch script will determine which is Live and which is Recovery.   It will then switch the Roles and restart the QMgr. 
    <br>
-   Next from that location run the following command to failover the QMgr.  
-
+   You will also observe that the putter and getter programs will reconnect to the new active instance of the QMgr.
+   <br> 
+1. You can now run the ./get-status.sh again to see current status and then the ./5-switch-crr.sh to switch roles back. 
+ 
    ```
-   sudo systemctl restart mqmonitor@MQ01HA
+   ./get-status.sh
    ```
+     ```
+   ./5-switch-crr.sh
+   ```
+  ![alt text](images/switch3-CRR.png)
 
-   Notice that the amqsphac, amqsghac getting reconnected. <br>
-   ![alt text](images/ha-test2.png)
-
-1. This indicates that the NativeHA is functioning as intended, and the queue manager is currently Active in a different Standby node, allowing the amqsphac and amqsghac to reconnect.
-
-   ![alt text](images/ha-test3.png)
-<br><br><br>
 
 
 ## 5. Summary <a name="summary"></a>
@@ -259,14 +343,3 @@ Congratulations! At this point, you ought to be familiar with the process of con
 [Return to Main Menu](../index.md)
 
 
-<!--
-/* COMMENTED <br>
-sed -e 's/NativeHALocalInstance:*/NativeHALocalInstance: \
-   CipherSpec=ANY_TLS12 \
-   CertificateLabel=selfsigned \
-   KeyRepository=\/var\/mqm\/qmgrs\/MQ01HA\/ssl\/key/' /var/mqm/qmgrs/MQ01HA/qm.ini > /var/mqm/qmgrs/MQ01HA/qm.ini.modified
-mv /var/mqm/qmgrs/MQ01HA/qm.ini.modified /var/mqm/qmgrs/MQ01HA/qm.ini
-sudo chmod 660 /var/mqm/qmgrs/MQ01HA/qm.ini
-sudo chown mqm:mqm /var/mqm/qmgrs/MQ01HA/qm.ini
-<br>
--->
