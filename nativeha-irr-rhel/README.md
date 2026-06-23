@@ -69,35 +69,57 @@ Click on the Windows image console to open it.
    ![alt text](images/win4.png)
    
 
-### 3a. Create Queue Manager <a name="create-live-qm"></a>
+### 3a. acemq1 - Create Live Queue Manager <a name="create-live-qm"></a>
 
-1. Run the following commands on each of the Virtual Machine acemq1. <br>
+1. Run the following commands <br>
 
    Create Queue Manager MQ01HA <br>
-```
+   ```
    crtmqm -lr `hostname` -lf 8192 -lp 10 -ls 10 -p 1414 MQ01HA
-```
-  ![alt text](images/crtmq1.png)
+   ```
+   ![alt text](images/crtmq1.png)
 
-### 3b. Create TLS Certificates <a name="tls-setup"></a>
 
-1. Run the below steps on **acemq1** to enable TLS on Queue Manager.  <br>
- Create TLS certificates. <br>
+
+### 3b. acemq4 - Create Recovery Queue Manager <a name="create-recovery-qm"></a>
+
+1. Run the following commands <br>
+
+   Create Queue Manager MQ01HA on the Recovery side <br>
+   ```
+   crtmqm -lr `hostname` -lf 8192 -lp 10 -ls 10 -p 1414 MQ01HA
+   ```
+   ![alt text](images/crtmq4.png)
+
+
+
+
+
+### 3c. acemq1 - Create TLS Certificates <a name="tls-setup"></a>
+
+1. Run the below steps to enable TLS on Queue Manager.  <br>
+ 
+   Create TLS certificates. <br>
    ```
    runmqakm -keydb -create -db /var/mqm/qmgrs/MQ01HA/ssl/key.kdb -pw passw0rd -stash
    ```
+   
    ```
    runmqakm -cert -create -db /var/mqm/qmgrs/MQ01HA/ssl/key.kdb -pw passw0rd -label selfsigned -dn CN=MQ01HA -size 2048
    ```
+   
    ```
    sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
    ```
    sudo chmod g+r /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
-![alt text](images/crtmq1a.png)
 
-2. Copy all key.* files to acemq2 Virtual Machines using sftp.   Login to acemq2 using password *engageibm* <br>
+   ![alt text](images/crtmq1a.png)
+
+
+2. acemq1 - Copy all key.* files to acemq4 (Recovery) Virtual Machines using sftp. 
+
    ```
    sftp ibmuser@acemq4
    ```
@@ -108,22 +130,23 @@ Click on the Windows image console to open it.
    quit
    ```
 
-![alt text](images/crtmq1b.png)
+   ![alt text](images/crtmq1b.png)
 
 
-4. On acemq4 run the following commands. <br>
+4. acemq4 - Run the following commands. <br>
    ```
    sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
    ```
    sudo chmod g+r /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
-![alt text](images/crtmq1c.png)
+   ![alt text](images/crtmq1c.png)
 
+   <br>
 
-### 3c. Update qm.ini <a name="update-live-qm-ini"></a>
+### 3c. acemq1 - Update Live qm.ini <a name="update-live-qm-ini"></a>
 
-1. On VM acemq1, we will add the TLS parameters as well as all 3 NativeHAInstances to qm.ini. 
+1. On VM acemq1, we will add the TLS parameters, NativeHARecoveryGroup stanza to qm.ini. 
 
    You can run the following command to look at the current **qm.ini** file.
 
@@ -133,30 +156,31 @@ Click on the Windows image console to open it.
    ![alt text](images/qm1.png)
 
    
-1. We will now from the **acemq1** putty session, run the following command. <br>
+1. run the following commands. <br>
 
-```
-./1-qm-ha.sh
-```
+   ```
+   cd ~/mqha-irr
+   ```
 
-<!--
+   ```
+   ./1-qm-ha.sh
+   ```
+
    ![alt text](images/qm1a.png)
--->
+
 
 
 1. When done run the following command on acemq1 instance to verify that the **qm.ini** was updated correctly. 
 
-```
-cat /var/mqm/qmgrs/MQ01HA/qm.ini
-```
+   ```
+   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   ```
 
-![alt text](images/qm1b.png)
-
-
+   ![alt text](images/qm1b.png)
 
 
 
-### 3d. Update qm.ini <a name="update-recovery-qm-ini"></a>
+### 3d. acemq4 - Update Recovery qm.ini <a name="update-recovery-qm-ini"></a>
 
    You can run the following command on **acemq4** to look at the current **qm.ini** file.
 
