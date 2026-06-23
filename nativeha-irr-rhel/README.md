@@ -133,26 +133,16 @@ Click on the Windows image console to open it.
    ![alt text](images/qm1.png)
 
    
-1. We will now from the **acemq1** putty session, use vi and add below lines. <br>
+1. We will now from the **acemq1** putty session, run the following command. <br>
 
 ```
-vi /var/mqm/qmgrs/MQ01HA/qm.ini
-
-NativeHALocalInstance:
-   Name=acemq1
-   GroupName=datacenter1
-   GroupRole=Live
-   GroupLocalAddress=(4454)
-   KeyRepository=/var/mqm/qmgrs/MQ01HA/ssl/key
-   GroupCertificateLabel=selfsigned
-NativeHARecoveryGroup:
-   GroupName=datacenter2
-   ReplicationAddress=acemq4(4454)
-   SyncReplication=Yes
+./1-qm-ha.sh
 ```
+
 <!--
    ![alt text](images/qm1a.png)
 -->
+
 
 1. When done run the following command on acemq1 instance to verify that the **qm.ini** was updated correctly. 
 
@@ -179,19 +169,7 @@ cat /var/mqm/qmgrs/MQ01HA/qm.ini
 1. We will now from the **acemq4** putty session, use vi and add below lines. <br>
 
 ```
-vi /var/mqm/qmgrs/MQ01HA/qm.ini
-
-NativeHALocalInstance:
-   Name=acemq4
-   GroupName=datacenter2
-   GroupRole=Recovery
-   GroupLocalAddress=(4454)
-   KeyRepository=/var/mqm/qmgrs/MQ01HA/ssl/key
-   GroupCertificateLabel=selfsigned
-NativeHARecoveryGroup:
-   GroupName=datacenter1
-   ReplicationAddress=acemq1(4454)
-   SyncReplication=Yes
+./2-qm-IRR.sh
 ```
 
 
