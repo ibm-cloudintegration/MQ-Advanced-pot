@@ -288,6 +288,8 @@ sudo systemctl start mqmonitor@MQ01HA
 
    ![alt text](./images/ha-test2.png)
 
+   ![alt text](./images/ha-test3.png)
+
 
 <br>
 
@@ -303,13 +305,14 @@ sudo systemctl start mqmonitor@MQ01HA
    ```
    ./get-status.sh 
    ```
-   ![alt text](images/status1-CRR.png)
+   ![alt text](images/status1-IRR.png)
+
 
 
 1. Run the following command from one of the putty instances and it will determine the current status and do the switch for each Datacenter as well as restart the QMgr on each instance.
    
    ```
-   ./5-switch-crr.sh
+   ./3-switch-irr.sh
    ```
     ![alt text](images/switch2-CRR.png)
 
