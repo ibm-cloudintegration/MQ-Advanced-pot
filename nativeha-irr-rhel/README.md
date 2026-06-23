@@ -95,7 +95,7 @@ Click on the Windows image console to open it.
 
 
 
-### 3c. acemq1 - Create TLS Certificates <a name="tls-setup"></a>
+### 3c. acemq1 - Create TLS Certificates <a name="tls-setup-live"></a>
 
 1. Run the below steps to enable TLS on Queue Manager.  <br>
  
@@ -118,7 +118,7 @@ Click on the Windows image console to open it.
    ![alt text](images/crtmq1a.png)
 
 
-2. acemq1 - Copy all key.* files to acemq4 (Recovery) Virtual Machines using sftp. 
+2. Copy all key.* files to acemq4 (Recovery) Virtual Machines using sftp. 
 
    ```
    sftp ibmuser@acemq4
@@ -133,7 +133,9 @@ Click on the Windows image console to open it.
    ![alt text](images/crtmq1b.png)
 
 
-4. acemq4 - Run the following commands. <br>
+### 3d. acemq4 - Update Certificate Permissions  <a name="tls-setup-recovery"></a>
+
+   Run the following commands. <br>
    ```
    sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
@@ -144,7 +146,8 @@ Click on the Windows image console to open it.
 
    <br>
 
-### 3c. acemq1 - Update Live qm.ini <a name="update-live-qm-ini"></a>
+
+### 3e. acemq1 - Update Live qm.ini <a name="update-live-qm-ini"></a>
 
 1. On VM acemq1, we will add the TLS parameters, NativeHARecoveryGroup stanza to qm.ini. 
 
@@ -162,15 +165,17 @@ Click on the Windows image console to open it.
    cd ~/mqha-irr
    ```
 
+   Run 1-qm-IRR.sh to enable Native HA IRR on the Live Region. The command will add Native HA configurations to qm.ini file.<br>
+
    ```
-   ./1-qm-ha.sh
+   ./1-qm-IRR.sh
    ```
 
    ![alt text](images/qm1a.png)
 
+   <br>
 
-
-1. When done run the following command on acemq1 instance to verify that the **qm.ini** was updated correctly. 
+1. When done run the following command to verify that the **qm.ini** was updated correctly. 
 
    ```
    cat /var/mqm/qmgrs/MQ01HA/qm.ini
@@ -178,12 +183,14 @@ Click on the Windows image console to open it.
 
    ![alt text](images/qm1b.png)
 
+   <br>
 
 
-### 3d. acemq4 - Update Recovery qm.ini <a name="update-recovery-qm-ini"></a>
+### 3f. acemq4 - Update Recovery qm.ini <a name="update-recovery-qm-ini"></a>
 
-   You can run the following command on **acemq4** to look at the current **qm.ini** file.
+   Run 2-qm-IRR.sh to enable Native HA IRR on the Recovery Region. The command will add Native HA configurations to **qm.ini** file.<br>
 
+   
    ```
    cat /var/mqm/qmgrs/MQ01HA/qm.ini
    ```
@@ -192,9 +199,14 @@ Click on the Windows image console to open it.
    
 1. We will now from the **acemq4** putty session, use vi and add below lines. <br>
 
-```
-./2-qm-IRR.sh
-```
+   ```
+   cd ~/mqha-irr
+   ```
+   
+   ```
+   ./2-qm-IRR.sh
+   ```
+   ![alt text](images/qm2a.png)
 
 
 1. When done run the following command on acemq4 instance to verify that the **qm.ini** was updated correctly. 
@@ -207,14 +219,15 @@ cat /var/mqm/qmgrs/MQ01HA/qm.ini
 
 
 
-### 3d. Start Queue Manager <a name="live-qmgr-start"></a>
 
-1. Run the following commands to restart the queue manager on acemq1,4. <br>
+### 3g. acemq1- Start Queue Manager <a name="live-qmgr-start"></a>
+
+1. Run the following commands to restart the queue manager on acemq1. <br>
 
    ```
    strmqm MQ01HA
    ```
-1. Once QMgr IS running ON acemq1, acemq4 run the following command. 
+1. Once QMgr is running ON acemq1, acemq4 run the following command. 
 
    The Queue Manager should be active in one of Virtual Machines. <br>
 
