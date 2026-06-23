@@ -220,21 +220,14 @@ cat /var/mqm/qmgrs/MQ01HA/qm.ini
 
 
 
-### 3g. acemq1- Start Queue Manager <a name="live-qmgr-start"></a>
-
-1. Run the following commands to restart the queue manager on acemq1. <br>
-
-   ```
-   strmqm MQ01HA
-   ```
-1. Once QMgr is running ON acemq1, acemq4 run the following command. 
+### 3g. acemq1 - Check Queue Manager <a name="live-qmgr-check"></a>
 
    The Queue Manager should be active in one of Virtual Machines. <br>
 
    ```
    dspmq -o nativeha -x
    ```
-![alt text](images/qm3.png)
+   ![alt text](images/qm3.png)
 
 
 ### 3e. Disable Security <a name="disable-security"></a>
@@ -248,13 +241,13 @@ cat /var/mqm/qmgrs/MQ01HA/qm.ini
 1. Run the following command, on the node where the queue manager is Active, <br>
 This will disable security and define the channel and local Queue used for testing. 
 
-```
-runmqsc MQ01HA
-ALTER QMGR CHLAUTH(DISABLED) CONNAUTH(' ')
-REFRESH SECURITY TYPE(CONNAUTH)
-DEFINE CHANNEL(NATIVEHACHL.SVRCONN) CHLTYPE(SVRCONN)
-DEFINE QLOCAL(APPQ) DEFPSIST(YES)
-```
+   ```
+   runmqsc MQ01HA
+   ALTER QMGR CHLAUTH(DISABLED) CONNAUTH(' ')
+   REFRESH SECURITY TYPE(CONNAUTH)
+   DEFINE CHANNEL(NATIVEHACHL.SVRCONN) CHLTYPE(SVRCONN)
+   DEFINE QLOCAL(APPQ) DEFPSIST(YES)
+   ```
 <br>
 
 ![alt text](images/qm4.png)
@@ -287,28 +280,14 @@ sudo systemctl start mqmonitor@MQ01HA
 
 ### 4a. Put and Get messages (amqsphac, amqsghac)  <a name="ha-put-get"></a>
 
+
 1. **On the Windows VM** <br> 
-   start two command line programs. <br>
-   
-   ![alt text](cmdlines.png)
-
-   On each Command Line window, run the following commands. <br>
-
-   ```
-   SET MQSERVER=NATIVEHACHL.SVRCONN/TCP/acemq1(1414),acemq4(1414)
-   ```
-
-   On acemq1, <br>
-   ```
-   amqsphac APPQ MQ01HA
-   ```
-
-   On acemq4, <br>
-   ```
-   amqsghac APPQ MQ01HA
-   ```
+   Open the **MQ-Labs** folder and start the **putter and getter** batch files. <br>
 
    ![alt text](images/ha-test1.png)
+
+   ![alt text](./images/ha-test2.png)
+
 
 <br>
 
