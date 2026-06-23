@@ -60,17 +60,18 @@ Click on the Windows image console to open it.
    ![alt text](images/win2.png)
 
 1. From the Windows VM's Console, open Putty program and open acemq1, acemq4 Virtual Machine sessions. <br>
+
    ![alt text](images/win3.png)
 
 
 1. Arrange the windows on your desktop and you should have the 3 RH vms.    Login to each VM using ibmuser/engage.
+
    ![alt text](images/win4.png)
    
 
-
 ### 3a. Create Queue Manager <a name="create-live-qm"></a>
 
-1. Run the following commands on each of the Virtual Machines (acemq1, acemq2, acemq3). <br>
+1. Run the following commands on each of the Virtual Machine acemq1. <br>
 
    Create Queue Manager MQ01HA <br>
 ```
