@@ -74,9 +74,9 @@ Click on the Windows image console to open it.
 
 1. Run the following commands <br>
 
-   Create Queue Manager MQ01HA <br>
+   Create Queue Manager MQ01IR <br>
    ```
-   crtmqm -lr `hostname` -lf 8192 -lp 10 -ls 10 -p 1414 MQ01HA
+   crtmqm -lr `hostname` -lf 8192 -lp 10 -ls 10 -p 1414 MQ01IR
    ```
    ![alt text](images/crtmq1.png)
 
@@ -86,9 +86,9 @@ Click on the Windows image console to open it.
 
 1. Run the following commands <br>
 
-   Create Queue Manager MQ01HA on the Recovery side <br>
+   Create Queue Manager MQ01IR on the Recovery side <br>
    ```
-   crtmqm -lr `hostname` -lf 8192 -lp 10 -ls 10 -p 1414 MQ01HA
+   crtmqm -lr `hostname` -lf 8192 -lp 10 -ls 10 -p 1414 MQ01IR
    ```
    ![alt text](images/crtmq4.png)
 
@@ -101,18 +101,18 @@ Click on the Windows image console to open it.
  
    Create TLS certificates. <br>
    ```
-   runmqakm -keydb -create -db /var/mqm/qmgrs/MQ01HA/ssl/key.kdb -pw passw0rd -stash
+   runmqakm -keydb -create -db /var/mqm/qmgrs/MQ01IR/ssl/key.kdb -pw passw0rd -stash
    ```
    
    ```
-   runmqakm -cert -create -db /var/mqm/qmgrs/MQ01HA/ssl/key.kdb -pw passw0rd -label selfsigned -dn CN=MQ01HA -size 2048
+   runmqakm -cert -create -db /var/mqm/qmgrs/MQ01IR/ssl/key.kdb -pw passw0rd -label selfsigned -dn CN=MQ01IR -size 2048
    ```
    
    ```
-   sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
+   sudo chown -R :mqm /var/mqm/qmgrs/MQ01IR/ssl/key.*
    ```
    ```
-   sudo chmod g+r /var/mqm/qmgrs/MQ01HA/ssl/key.*
+   sudo chmod g+r /var/mqm/qmgrs/MQ01IR/ssl/key.*
    ```
 
    ![alt text](images/crtmq1a.png)
@@ -124,7 +124,7 @@ Click on the Windows image console to open it.
    sftp ibmuser@acemq4
    ```
    ``` 
-   mput /var/mqm/qmgrs/MQ01HA/ssl/key.* /var/mqm/qmgrs/MQ01HA/ssl
+   mput /var/mqm/qmgrs/MQ01IR/ssl/key.* /var/mqm/qmgrs/MQ01IR/ssl
    ```
    ```
    quit
@@ -137,10 +137,10 @@ Click on the Windows image console to open it.
 
 1. Run the following commands to grant access to key.* files. <br>
    ```
-   sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
+   sudo chown -R :mqm /var/mqm/qmgrs/MQ01IR/ssl/key.*
    ```
    ```
-   sudo chmod g+r /var/mqm/qmgrs/MQ01HA/ssl/key.*
+   sudo chmod g+r /var/mqm/qmgrs/MQ01IR/ssl/key.*
    ```
    ![alt text](images/crtmq1c.png)
 
@@ -154,7 +154,7 @@ Click on the Windows image console to open it.
    You can run the following command to look at the current **qm.ini** file.
 
    ```
-   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   cat /var/mqm/qmgrs/MQ01IR/qm.ini
    ```
    ![alt text](images/qm1.png)
 
@@ -178,7 +178,7 @@ Click on the Windows image console to open it.
 1. When done run the following command to verify that the **qm.ini** was updated correctly. 
 
    ```
-   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   cat /var/mqm/qmgrs/MQ01IR/qm.ini
    ```
 
    ![alt text](images/qm1b.png)
@@ -195,7 +195,7 @@ Click on the Windows image console to open it.
    ```
    Check qm.ini. <br>
    ```
-   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   cat /var/mqm/qmgrs/MQ01IR/qm.ini
    ```
    ![alt text](images/qm2.png)
 
@@ -215,7 +215,7 @@ Click on the Windows image console to open it.
 1. When done run the following command on acemq4 instance to verify that the **qm.ini** was updated correctly. 
 
    ```
-   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   cat /var/mqm/qmgrs/MQ01IR/qm.ini
    ```
 
    ![alt text](images/qm2b.png)
@@ -238,10 +238,10 @@ https://www.ibm.com/docs/en/ibm-mq/9.4.x?topic=ha-monitoring-restarting-ending-q
    ln -s /opt/mqm/samp/mqmonitor@.service /etc/systemd/system 
    ````
    ```
-   sudo systemctl enable mqmonitor@MQ01HA
+   sudo systemctl enable mqmonitor@MQ01IR
    ```
    ```
-   sudo systemctl start mqmonitor@MQ01HA
+   sudo systemctl start mqmonitor@MQ01IR
    ```
    <br>
 
@@ -261,7 +261,7 @@ Run the following command, on the node where the queue manager is Active, <br>
 This will disable security and define the channel and local Queue used for testing. 
 
    ```
-   runmqsc MQ01HA
+   runmqsc MQ01IR
    ALTER QMGR CHLAUTH(DISABLED) CONNAUTH(' ')
    REFRESH SECURITY TYPE(CONNAUTH)
    DEFINE CHANNEL(NATIVEHACHL.SVRCONN) CHLTYPE(SVRCONN)
