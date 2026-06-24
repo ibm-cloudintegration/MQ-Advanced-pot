@@ -200,12 +200,13 @@ Click on the Windows image console to open it.
    ![alt text](images/qm2.png)
 
    
-1. We will now from the **acemq4** putty session, use vi and add below lines. <br>
+1. Run below commands. <br>
 
    ```
    cd ~/mqha-irr
    ```
    
+   Enable Native HA IRR. <br>
    ```
    ./2-qm-IRR.sh
    ```
@@ -269,18 +270,18 @@ This will disable security and define the channel and local Queue used for testi
    quit
 
    ```
-   <br>
+
 
    ![alt text](images/qm4.png)
 
    <br>
 
-## 4. Testing High Availability (HA) in Live Environment <a name="testing-live-ha"></a>
+## 4. Testing In-Region Replication in Live Environment <a name="testing-live-ha"></a>
 
 ### 4a. Put and Get messages (amqsphac, amqsghac)  <a name="ha-put-get"></a>
 
 
-1. **On the Windows VM** <br> 
+1. **On the Windows VM Desktop** <br> 
    Open the **MQ-Labs** folder and start the **putter and getter** batch files. <br>
 
    ![alt text](images/ha-test1.png)
@@ -297,9 +298,7 @@ This will disable security and define the channel and local Queue used for testi
 
 ## 4. Switching Roles  <a name="switch-roles"></a>
 
-1. We will now check the status of both are Datacenter deployments.  If this is the first time you should see **Datacenter1 - Live** and **Datacenter2 - Recovery**
-
-   You can run the script in either Datacenter.  In this example we are showing the command running in both Datacenters but you only need to run it on one of the putty instances.  
+1. We will now check the status on both Datacenter deployments. If this is the first time you should see **Datacenter1 - Live** and **Datacenter2 - Recovery**
 
    **acemq1**
    ```
