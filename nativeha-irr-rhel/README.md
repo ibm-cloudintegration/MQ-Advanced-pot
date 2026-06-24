@@ -6,16 +6,19 @@
 - [1. Introduction](#introduction)
 - [2. Workshop Environments ](#workshop-env)
 - [3. Live Environment Setup](#live-setup)
-  * [3a. Create Queue Manager ](#create-live-qm)
-  * [3b. Create TLS Certificates](#tls-setup)
-  * [3c. Update qm.ini](#update-live-qm-ini)
-  * [3d. Start Queue Manager](#live-qmgr-start)
-  * [3e. Disable Security](#disable-security)
+  * [3a. acemq1 - Create Live Queue Manager ](#create-live-qm)
+  * [3b. acemq4 - Create Recovery Queue Manager](#create-recovery-qm)
+  * [3c. acemq1 - Create TLS Certificates](#tls-setup-live)
+  * [3d. acemq4 - Update Certificate Permissions](#tls-setup-recovery)
+  * [3e. acemq1 - Update Live qm.ini](#update-live-qm-ini)
+  * [3f. acemq4 - Update Recovery qm.ini ](#update-recovery-qm-ini)
+  * [3g. acemq1, acemq4 - Enable systemd Monitoring](#enable-systemd)  
+  * [3h. Disable Security](#disable-security)
   * [3f. Enable systemd Monitoring](#live-systemd)
-- [4. Testing High Availability (HA) in Live Environment](#testing-live-ha)
+- [4. Testing In-Region Replication in Live Environment](#testing-irr)
   * [4a. Put and Get messages (amqsphac, amqsghac)](#ha-put-get)
-  * [4b. Failover the Queue Manager](#ha-failover)
-- [5. Summary ](#summary)
+- [5. Switching Roles](#switch-roles)
+- [6. Summary ](#summary)
 
 ---
 [Return to Main Menu](../index.md)
@@ -224,7 +227,7 @@ Click on the Windows image console to open it.
    <br>
 
 
-### 3g. acemq1, acemq4 - Enable systemd Monitoring  <a name="live-systemd"></a>
+### 3g. acemq1, acemq4 - Enable systemd Monitoring  <a name="enable-systemd"></a>
 
 1. Reference: <br>
 https://www.ibm.com/docs/en/ibm-mq/9.4.x?topic=ha-monitoring-restarting-ending-queue-manager-instances
@@ -276,7 +279,7 @@ This will disable security and define the channel and local Queue used for testi
 
    <br>
 
-## 4. Testing In-Region Replication in Live Environment <a name="testing-live-ha"></a>
+## 4. Testing In-Region Replication in Live Environment <a name="testing-irr"></a>
 
 ### 4a. Put and Get messages (amqsphac, amqsghac)  <a name="ha-put-get"></a>
 
@@ -296,7 +299,7 @@ This will disable security and define the channel and local Queue used for testi
 
 
 
-## 4. Switching Roles  <a name="switch-roles"></a>
+## 5. Switching Roles  <a name="switch-roles"></a>
 
 1. We will now check the status on both Datacenter deployments. If this is the first time you should see **Datacenter1 - Live** and **Datacenter2 - Recovery**
 
