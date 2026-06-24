@@ -68,6 +68,7 @@ Click on the Windows image console to open it.
 
    ![alt text](images/win4.png)
    
+<br>
 
 ### 3a. acemq1 - Create Live Queue Manager <a name="create-live-qm"></a>
 
@@ -79,7 +80,7 @@ Click on the Windows image console to open it.
    ```
    ![alt text](images/crtmq1.png)
 
-
+<br>
 
 ### 3b. acemq4 - Create Recovery Queue Manager <a name="create-recovery-qm"></a>
 
@@ -91,8 +92,7 @@ Click on the Windows image console to open it.
    ```
    ![alt text](images/crtmq4.png)
 
-
-
+<br>
 
 
 ### 3c. acemq1 - Create TLS Certificates <a name="tls-setup-live"></a>
@@ -135,7 +135,7 @@ Click on the Windows image console to open it.
 
 ### 3d. acemq4 - Update Certificate Permissions  <a name="tls-setup-recovery"></a>
 
-   Run the following commands. <br>
+1. Run the following commands to grant access to key.* files. <br>
    ```
    sudo chown -R :mqm /var/mqm/qmgrs/MQ01HA/ssl/key.*
    ```
@@ -188,9 +188,12 @@ Click on the Windows image console to open it.
 
 ### 3f. acemq4 - Update Recovery qm.ini <a name="update-recovery-qm-ini"></a>
 
-   Run 2-qm-IRR.sh to enable Native HA IRR on the Recovery Region. The command will add Native HA configurations to **qm.ini** file.<br>
+1. Run 2-qm-IRR.sh to enable Native HA IRR on the Recovery Region. The command will add Native HA configurations to **qm.ini** file.<br>
 
-   
+   ```
+   ./2-qm-IRR.sh
+   ```
+   Check qm.ini. <br>
    ```
    cat /var/mqm/qmgrs/MQ01HA/qm.ini
    ```
@@ -211,16 +214,37 @@ Click on the Windows image console to open it.
 
 1. When done run the following command on acemq4 instance to verify that the **qm.ini** was updated correctly. 
 
-```
-cat /var/mqm/qmgrs/MQ01HA/qm.ini
-```
+   ```
+   cat /var/mqm/qmgrs/MQ01HA/qm.ini
+   ```
 
-![alt text](images/qm2b.png)
+   ![alt text](images/qm2b.png)
+
+   <br>
 
 
+### 3g. acemq1, acemq4 - Enable systemd Monitoring  <a name="live-systemd"></a>
+
+1. Reference: <br>
+https://www.ibm.com/docs/en/ibm-mq/9.4.x?topic=ha-monitoring-restarting-ending-queue-manager-instances
+<br>
+
+   You can implement a method to ensure that the queue manager instances in the Native HA configuration are still running, and restart them if required. <br><br>
 
 
-### 3g. acemq1 - Check Queue Manager <a name="live-qmgr-check"></a>
+1. Run the following commands on each RHEL VM. <br>
+
+   ```
+   ln -s /opt/mqm/samp/mqmonitor@.service /etc/systemd/system 
+   ````
+   ```
+   sudo systemctl enable mqmonitor@MQ01HA
+   ```
+   ```
+   sudo systemctl start mqmonitor@MQ01HA
+   ```
+   <br>
+
 
    The Queue Manager should be active in one of Virtual Machines. <br>
 
@@ -230,15 +254,10 @@ cat /var/mqm/qmgrs/MQ01HA/qm.ini
    ![alt text](images/qm3.png)
 
 
-### 3e. Disable Security <a name="disable-security"></a>
+### 3h. Disable Security <a name="disable-security"></a>
 
-1. Find the node that the QMgr is running as **acemq1** using this command.
 
-   ```
-   dspmq -o nativeha -x 
-   ```
-
-1. Run the following command, on the node where the queue manager is Active, <br>
+Run the following command, on the node where the queue manager is Active, <br>
 This will disable security and define the channel and local Queue used for testing. 
 
    ```
@@ -247,34 +266,14 @@ This will disable security and define the channel and local Queue used for testi
    REFRESH SECURITY TYPE(CONNAUTH)
    DEFINE CHANNEL(NATIVEHACHL.SVRCONN) CHLTYPE(SVRCONN)
    DEFINE QLOCAL(APPQ) DEFPSIST(YES)
+   quit
+
    ```
-<br>
+   <br>
 
-![alt text](images/qm4.png)
+   ![alt text](images/qm4.png)
 
-
-
-### 3f. Enable systemd Monitoring  <a name="live-systemd"></a>
-
-Reference: <br>
-https://www.ibm.com/docs/en/ibm-mq/9.4.x?topic=ha-monitoring-restarting-ending-queue-manager-instances
-<br>
-
-You must implement a method to ensure that the queue manager instances in the Native HA configuration are still running, and restart them if required.<br>
-
-Run the following commands on each RHEL VM. <br>
-
-```
-ln -s /opt/mqm/samp/mqmonitor@.service /etc/systemd/system 
-````
-```
-sudo systemctl enable mqmonitor@MQ01HA
-```
-```
-sudo systemctl start mqmonitor@MQ01HA
-```
-<br>
-
+   <br>
 
 ## 4. Testing High Availability (HA) in Live Environment <a name="testing-live-ha"></a>
 
@@ -302,40 +301,45 @@ sudo systemctl start mqmonitor@MQ01HA
 
    You can run the script in either Datacenter.  In this example we are showing the command running in both Datacenters but you only need to run it on one of the putty instances.  
 
+   **acemq1**
    ```
    ./get-status.sh 
    ```
    ![alt text](images/status1-IRR.png)
 
 
+   Let's switch roles, which will make the Live to be Recovery and Recovery to be Live. <br>
 
-1. Run the following command from one of the putty instances and it will determine the current status and do the switch for each Datacenter as well as restart the QMgr on each instance.
-   
    ```
    ./3-switch-irr.sh
    ```
-    ![alt text](images/switch2-CRR.png)
 
-   **Note:** Here you will see the switch script will determine which is Live and which is Recovery.   It will then switch the Roles and restart the QMgr. 
-   <br>
    You will also observe that the putter and getter programs will reconnect to the new active instance of the QMgr.
+
+   ![alt text](images/switch1-IRR.png)
+   
    <br> 
+
 1. You can now run the ./get-status.sh again to see current status and then the ./5-switch-crr.sh to switch roles back. 
  
    ```
    ./get-status.sh
    ```
-     ```
-   ./5-switch-crr.sh
+
+   ![alt text](images/status2-IRR.png)
+
+1. Now, you can switch the roles back by running ./3-switch-CRR.sh to failover back to the Live data center. <br>
    ```
-  ![alt text](images/switch3-CRR.png)
+   ./3-switch-irr.sh
+   ```
 
-
+   <br>
 
 ## 5. Summary <a name="summary"></a>
 
-Congratulations! At this point, you ought to be familiar with the process of configuring IBM MQ HA in a Primary region.
+Congratulations! At this point, you ought to be familiar with the process of configuring IBM MQ Native HA IRR in the Primary, and Recovery regions.
 
+   
 <br>
 [Return to Main Menu](../index.md)
 
