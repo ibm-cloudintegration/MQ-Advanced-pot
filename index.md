@@ -24,6 +24,8 @@ An application developer has a choice of programming interfaces, and programming
 |---------------------------------------|-----------------------------------------------------------------------------|
 | [MQ NativeHA / CRR (VM)](nativeha-crr-rhel)         | This section you will tap into the value of existing data flowing over MQ with zero impact to the existing applications or their messages, and without a need for re-architecture your message flows.
 |---------------------------------------|-----------------------------------------------------------------------------|
+| [MQ NativeHA / IRR (VM)](nativeha-irr-rhel)         | This section you will go over IBM MQ Native HA In-Region Replication (IRR).
+|---------------------------------------|-----------------------------------------------------------------------------|
 | [MQ OTEL (opentelemetry tracing)](opentelemetry-tracing)         | This section you will tap into the value of existing data flowing over MQ with zero impact to the existing applications or their messages, and without a need for re-architecture your message flows.
 |---------------------------------------|-----------------------------------------------------------------------------|
 | [MQ Streaming queues](StreamQ/README.md)         | This section you will tap into the value of existing data flowing over MQ with zero impact to the existing applications or their messages, and without a need for re-architecture your message flows.
