@@ -1,4 +1,4 @@
-# IBM MQ NativeHA on RHEL
+# IBM MQ NativeHA In-Region Replication (IRR) on RHEL
 
 ---
 
