@@ -5,7 +5,7 @@
 # Table of Contents
 - [1. Introduction](#introduction)
 - [2. Workshop Environments ](#workshop-env)
-- [3. Live Environment Setup](#live-setup)
+- [3. IRR Setup](#live-setup)
   * [3a. acemq1 - Create Live Queue Manager ](#create-live-qm)
   * [3b. acemq4 - Create Recovery Queue Manager](#create-recovery-qm)
   * [3c. acemq1 - Create TLS Certificates](#tls-setup-live)
@@ -14,7 +14,6 @@
   * [3f. acemq4 - Update Recovery qm.ini ](#update-recovery-qm-ini)
   * [3g. acemq1, acemq4 - Enable systemd Monitoring](#enable-systemd)  
   * [3h. Disable Security](#disable-security)
-  * [3f. Enable systemd Monitoring](#live-systemd)
 - [4. Testing In-Region Replication in Live Environment](#testing-irr)
   * [4a. Put and Get messages (amqsphac, amqsghac)](#ha-put-get)
 - [5. Switching Roles](#switch-roles)
@@ -52,7 +51,7 @@ Click on the Windows image console to open it.
 <br>
 
 
-## 3. Live Environment Setup <a name="live-setup"></a>
+## 3. IRR Setup <a name="live-setup"></a>
 
 1. From the Windows console click on the **CAD** to get to the login page.  Click on OK for the Business Use Notice
 
