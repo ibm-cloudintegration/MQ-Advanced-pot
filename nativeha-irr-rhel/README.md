@@ -18,6 +18,7 @@
   * [4a. Put and Get messages (amqsphac, amqsghac)](#ha-put-get)
 - [5. Switching Roles](#switch-roles)
 - [6. Summary ](#summary)
+- [7. References ](#references)
 
 ---
 [Return to Main Menu](../index.md)
@@ -334,14 +335,26 @@ This will disable security and define the channel and local Queue used for testi
    ./3-switch-irr.sh
    ```
 
-   <br>
 
-## 5. Summary <a name="summary"></a>
+
+## 6. Summary <a name="summary"></a>
 
 Congratulations! At this point, you ought to be familiar with the process of configuring IBM MQ Native HA IRR in the Primary, and Recovery regions.
-
-   
 <br>
+
+## 7. References <a name="references"></a>
+
+Native HA IRR: <br>
+https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=recovery-native-ha-irr
+<br>
+
+Example: Deploying a simple Native HA IRR configuration on Linux: <br>
+https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=nhi-example-deploying-simple-native-ha-irr-configuration-linux
+
+
+
+<br>
+
 [Return to Main Menu](../index.md)
 
 
