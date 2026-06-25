@@ -345,11 +345,11 @@ Congratulations! At this point, you ought to be familiar with the process of con
 ## 7. References <a name="references"></a>
 
 Native HA IRR: <br>
-<a href=https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=recovery-native-ha-irr>https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=recovery-native-ha-irr</a>
+<a href="https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=recovery-native-ha-irr">https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=recovery-native-ha-irr</a>
 <br>
 
 Example: Deploying a simple Native HA IRR configuration on Linux: <br>
-<a href=https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=nhi-example-deploying-simple-native-ha-irr-configuration-linux>https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=nhi-example-deploying-simple-native-ha-irr-configuration-linux</a>
+<a href="https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=nhi-example-deploying-simple-native-ha-irr-configuration-linux">https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=nhi-example-deploying-simple-native-ha-irr-configuration-linux</a>
 
 
 
