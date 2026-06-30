@@ -53,7 +53,7 @@ Click on the Windows image console to open it.
 1. From the Windows VM's Console, open Putty program and open acemq1, acemq2, acemq3 Virtual Machine sessions. <br>
    ![alt text](images/win3.png)
 
-1. Arrange the windows on your desktop and you should have the 3 RH vms.    Login to each VM using ibmuser/engage.
+1. Arrange the windows on your desktop and you should have the 3 RH vms.    Login to each VM using ibmuser/engageibm.
    ![alt text](images/win4.png)
 
 

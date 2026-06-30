@@ -67,7 +67,7 @@ Click on the Windows image console to open it.
    ![alt text](images/win3.png)
 
 
-1. Arrange the windows on your desktop and you should have the 3 RH vms.    Login to each VM using ibmuser/engage.
+1. Arrange the windows on your desktop and you should have the 3 RH vms.    Login to each VM using ibmuser/engageibm.
 
    ![alt text](images/win4.png)
    
